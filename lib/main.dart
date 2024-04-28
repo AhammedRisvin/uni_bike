@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:uni_bike/app/utils/app_constants.dart';
 
 import 'app/core/app_router.dart';
-import 'app/modules/auth/view/login_screen.dart';
+import 'app/modules/auth/view/splash_screen.dart';
 import 'app/utils/extensions.dart';
 
 void main() {
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
                     useMaterial3: true,
                   ),
                   debugShowCheckedModeBanner: false,
-                  home: const LoginScreen(),
+                  home: const SplashScreen(),
                 );
               },
             );

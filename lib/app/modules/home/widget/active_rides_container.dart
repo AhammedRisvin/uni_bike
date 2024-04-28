@@ -4,11 +4,14 @@ import '../../../helpers/common_widget.dart';
 import '../../../helpers/size_box.dart';
 import '../../../utils/app_constants.dart';
 import '../../../utils/extensions.dart';
+import '../view/home_screen.dart';
 
-class EventDetailsContainer extends StatelessWidget {
+class ActiveRidesContainer extends StatelessWidget {
   // final EventDatum? eventData;
-  const EventDetailsContainer({
+  final bool isFromMyRide;
+  const ActiveRidesContainer({
     super.key,
+    this.isFromMyRide = false,
   });
 
   @override
@@ -118,24 +121,15 @@ class EventDetailsContainer extends StatelessWidget {
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 15.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: commonTextWidget(
-                      color: AppConstants.white,
-                      align: TextAlign.start,
-                      maxLines: 1,
-                      text: "Start Point",
-                      overFlow: TextOverflow.ellipsis,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
                   commonTextWidget(
                     color: AppConstants.white,
-                    text: "End point",
-                    fontSize: 11,
-                    fontWeight: FontWeight.w700,
+                    align: TextAlign.start,
+                    text: "+919747489556",
+                    overFlow: TextOverflow.ellipsis,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
                   ),
                 ],
               ),
@@ -163,6 +157,14 @@ class EventDetailsContainer extends StatelessWidget {
                       ),
                     ],
                   ),
+                  const commonTextWidget(
+                    color: AppConstants.appPrimaryColor,
+                    align: TextAlign.start,
+                    text: "To",
+                    overFlow: TextOverflow.ellipsis,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
+                  ),
                   Row(
                     children: [
                       const commonTextWidget(
@@ -181,6 +183,23 @@ class EventDetailsContainer extends StatelessWidget {
                 ],
               ),
             ),
+            const SizeBoxH(15),
+            isFromMyRide
+                ? const SizedBox.shrink()
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CommonBannerButtonWidget(
+                        bgColor: AppConstants.appPrimaryColor,
+                        text: "Show intrest",
+                        borderColor: AppConstants.appPrimaryColor,
+                        textColor: AppConstants.black,
+                        width: Responsive.width * 35,
+                        height: Responsive.height * 4,
+                        radius: 8,
+                      ),
+                    ],
+                  )
           ],
         ),
       ),
