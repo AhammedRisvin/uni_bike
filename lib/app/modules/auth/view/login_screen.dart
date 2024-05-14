@@ -4,6 +4,7 @@ import 'package:uni_bike/app/helpers/common_widget.dart';
 import 'package:uni_bike/app/helpers/size_box.dart';
 import 'package:uni_bike/app/utils/app_constants.dart';
 import 'package:uni_bike/app/utils/extensions.dart';
+import 'package:uni_bike/app/utils/loading_overlay.dart';
 
 import 'otp_sccree.dart';
 
@@ -15,6 +16,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  TextEditingController phoneCntrlr = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +57,8 @@ class _LoginScreenState extends State<LoginScreen> {
               hintText: "phone number",
               keyboardType: TextInputType.number,
               textInputAction: TextInputAction.done,
-              controller: TextEditingController(),
+              controller: phoneCntrlr,
+              maxLength: 10,
             ),
             const Padding(
               padding: EdgeInsets.only(left: 10.0, top: 10),
@@ -67,9 +71,20 @@ class _LoginScreenState extends State<LoginScreen> {
             SizeBoxH(Responsive.height * 5),
             CommonButton(
               onTap: () {
-                Routes.push(
-                  screen: const OtpScreen(),
-                );
+                LoadingOverlay.of(context).show();
+                if (phoneCntrlr.text.isEmpty || phoneCntrlr.text.length != 10) {
+                  LoadingOverlay.of(context).hide();
+                  toast(
+                    context,
+                    title: "Enter valid phone Number",
+                    backgroundColor: Colors.red,
+                  );
+                } else {
+                  Routes.push(
+                    screen: const OtpScreen(),
+                  );
+                  LoadingOverlay.of(context).hide;
+                }
               },
               text: "Continue",
               width: Responsive.width * 100,

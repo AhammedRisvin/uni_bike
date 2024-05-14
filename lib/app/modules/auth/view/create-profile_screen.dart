@@ -23,6 +23,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppConstants.black,
+      resizeToAvoidBottomInset: false,
       body: Consumer<AuthProvider>(
         builder: (context, provider, child) => Container(
           height: Responsive.height * 100,
@@ -114,23 +115,24 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                         ),
                 ),
               ),
-              const SizeBoxH(50),
+              const SizeBoxH(30),
               CommonTextFormField(
                 bgColor: AppConstants.drawerBgColor,
                 hintText: "Full name",
                 keyboardType: TextInputType.name,
                 textInputAction: TextInputAction.next,
-                controller: TextEditingController(),
+                controller: provider.nameCntrlr,
               ),
-              const SizeBoxH(30),
+              const SizeBoxH(10),
               CommonTextFormField(
                 bgColor: AppConstants.drawerBgColor,
                 hintText: "phone number",
-                keyboardType: TextInputType.name,
+                keyboardType: TextInputType.phone,
+                maxLength: 10,
                 textInputAction: TextInputAction.next,
-                controller: TextEditingController(),
+                controller: provider.phoneCntrlr,
               ),
-              const SizeBoxH(30),
+              const SizeBoxH(10),
               Container(
                 width: Responsive.width * 100,
                 padding: const EdgeInsets.symmetric(
@@ -229,26 +231,34 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                   ],
                 ),
               ),
-              const SizeBoxH(30),
+              const SizeBoxH(10),
               CommonTextFormField(
                 bgColor: AppConstants.drawerBgColor,
                 hintText: "Departments",
                 keyboardType: TextInputType.name,
                 textInputAction: TextInputAction.next,
-                controller: TextEditingController(),
+                controller: provider.departmnetCntrlr,
               ),
-              const SizeBoxH(30),
+              const SizeBoxH(10),
               CommonTextFormField(
                 bgColor: AppConstants.drawerBgColor,
                 hintText: "Hostel Name",
                 keyboardType: TextInputType.name,
                 textInputAction: TextInputAction.next,
-                controller: TextEditingController(),
+                controller: provider.branchCntrlr,
               ),
-              const Spacer(),
+              const SizeBoxH(10),
+              CommonTextFormField(
+                bgColor: AppConstants.drawerBgColor,
+                hintText: "College Id",
+                keyboardType: TextInputType.name,
+                textInputAction: TextInputAction.next,
+                controller: provider.idCntrlr,
+              ),
+              Spacer(),
               CommonButton(
                 onTap: () {
-                  Routes.push(screen: UniBikeBottomNav());
+                  provider.createUserFn(context: context);
                 },
                 text: "Submit",
                 width: Responsive.width * 100,

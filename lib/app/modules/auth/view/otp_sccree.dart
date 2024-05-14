@@ -21,10 +21,12 @@ class OtpScreen extends StatefulWidget {
 }
 
 class _OtpScreenState extends State<OtpScreen> {
+  TextEditingController otpCntrlr = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppConstants.black,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: AppConstants.black,
         leading: IconButton(
@@ -58,7 +60,7 @@ class _OtpScreenState extends State<OtpScreen> {
             const commonTextWidget(
               align: TextAlign.center,
               color: AppConstants.subTextGrey,
-              text: "sent otp to +91 9747489556",
+              text: "sent otp to +91 974*****56",
               fontSize: 14,
               fontWeight: FontWeight.w500,
               letterSpacing: 0.2,
@@ -98,13 +100,21 @@ class _OtpScreenState extends State<OtpScreen> {
               fieldStyle: FieldStyle.box,
               onCompleted: (pin) {
                 log("Completed: $pin");
-                context.read<AuthProvider>().otpController = pin;
+                otpCntrlr.text = pin;
               },
             ),
             SizeBoxH(Responsive.height * 6),
             CommonButton(
               onTap: () {
-                Routes.push(screen: const CreateProfileScreen());
+                if (otpCntrlr.text == "1111") {
+                  Routes.push(screen: const CreateProfileScreen());
+                } else {
+                  toast(
+                    context,
+                    title: "Enter valid otp",
+                    backgroundColor: Colors.red,
+                  );
+                }
               },
               text: "Continue",
               width: Responsive.width * 100,
