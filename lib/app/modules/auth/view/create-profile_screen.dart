@@ -9,7 +9,6 @@ import 'package:uni_bike/app/modules/auth/vieww%20model/auth_provider.dart';
 import 'package:uni_bike/app/utils/extensions.dart';
 
 import '../../../utils/app_constants.dart';
-import '../../bottom_nav/view/bottom_nav_screen.dart';
 
 class CreateProfileScreen extends StatefulWidget {
   const CreateProfileScreen({super.key});
@@ -255,7 +254,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 textInputAction: TextInputAction.next,
                 controller: provider.idCntrlr,
               ),
-              Spacer(),
+              const Spacer(),
               CommonButton(
                 onTap: () {
                   provider.createUserFn(context: context);
