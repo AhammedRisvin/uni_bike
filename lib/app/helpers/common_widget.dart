@@ -3,6 +3,7 @@
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -91,19 +92,22 @@ class CommonButton extends StatelessWidget {
   final double size;
   final BorderRadiusGeometry? borderRadius;
   final double radius;
+  final bool isLoading;
 
-  const CommonButton(
-      {super.key,
-      required this.onTap,
-      this.bgColor = AppConstants.appPrimaryColor,
-      this.textColor = AppConstants.black,
-      this.borderColor = AppConstants.black,
-      required this.text,
-      required this.width,
-      this.borderRadius,
-      this.size = 18,
-      this.radius = 100,
-      required this.height});
+  const CommonButton({
+    super.key,
+    required this.onTap,
+    this.bgColor = AppConstants.appPrimaryColor,
+    this.textColor = AppConstants.black,
+    this.borderColor = AppConstants.black,
+    required this.text,
+    required this.width,
+    this.borderRadius,
+    this.size = 18,
+    this.radius = 100,
+    required this.height,
+    this.isLoading = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -118,12 +122,17 @@ class CommonButton extends StatelessWidget {
             color: bgColor,
             border: Border.all(color: borderColor)),
         child: Center(
-          child: commonTextWidget(
-            color: textColor,
-            text: text,
-            fontWeight: FontWeight.w700,
-            fontSize: size,
-          ),
+          child: isLoading
+              ? const CupertinoActivityIndicator(
+                  radius: 15,
+                  color: AppConstants.white,
+                )
+              : commonTextWidget(
+                  color: textColor,
+                  text: text,
+                  fontWeight: FontWeight.w700,
+                  fontSize: size,
+                ),
         ),
       ),
     );

@@ -45,25 +45,17 @@ class ServerClient {
     Map<String, dynamic>? data,
     bool post = true,
   }) async {
-    // String? token = await _storage.read(key: StringConst.token);
-    String? token =
-        '5dac68d93137d6ff06b582736ac2029a66d0cc1a64a19dce1450b0149ada523cea1377c615cf44c3f521cb2f8748259cbe464ae7ea7620d0d7a0fc49f844e92c7a9e39bc4dc8a0f9a3a840a2b0b193bf521f5b9c038d54517bae5831703eeabcb6573738e2bf268c5e6d8ac8ac4f8e5f391288d4da7d223da72ccd66449003eb40ffb78cf99be91309dae48215ec3193bac62402a1f9ad16ae48a9134c2feb7afc9f5dc1b97c9b8b64a1c79a600c54ff';
+    String? token = await _storage.read(key: StringConst.token);
     Map<String, String> headers = {
       "Content-Type": "application/json",
       "Accept": "application/json",
-      // "country": "INDIA",
-      // "appKey": "65f7d05df174e1715a51900f",
       "authorization": "Bearer $token",
     };
-    log("urlllllllllllllllllllll :: $url");
-    log("data is $data");
-    log('token$token');
     try {
       var body = json.encode(data);
       var response = await http
           .post(Uri.parse(url), body: post ? body : null, headers: headers)
           .timeout(const Duration(seconds: _timeout));
-      log('profile ${response.body}');
       return _response(response);
     } on SocketException {
       return [600, "No internet"];
@@ -128,7 +120,7 @@ class ServerClient {
       case 404:
         return [response.statusCode, "You're using unregistered application"];
       case 500:
-        return [response.statusCode, jsonDecode(response.body)["message"]];
+        return [response.statusCode, "Server error"];
       case 503:
         return [response.statusCode, jsonDecode(response.body)["message"]];
       case 504:

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
+import 'package:uni_bike/app/modules/auth/vieww%20model/number_controller.dart';
 
 import '../modules/auth/vieww model/auth_provider.dart';
 import '../modules/bottom_nav/view model/bottom_nav_provider.dart';
@@ -38,6 +39,9 @@ final List<SingleChildWidget> providers = [
   ),
   ChangeNotifierProvider(
     create: ((context) => CreateRideProvider()),
+  ),
+  ChangeNotifierProvider(
+    create: ((context) => NumberController()),
   ),
   // ChangeNotifierProvider(
   //   create: ((context) => FacilityRentalProvider()),
