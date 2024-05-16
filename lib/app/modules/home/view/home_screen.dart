@@ -1,10 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:uni_bike/app/core/app_router.dart';
 import 'package:uni_bike/app/helpers/size_box.dart';
 import 'package:uni_bike/app/modules/home/view%20model/home_provider.dart';
 import 'package:uni_bike/app/utils/app_constants.dart';
 
+import '../../../core/string_const.dart';
 import '../../../helpers/common_widget.dart';
 import '../../../utils/extensions.dart';
 import '../widget/active_rides_container.dart';
@@ -18,6 +22,19 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    init();
+  }
+
+  init() async {
+    const FlutterSecureStorage storage = FlutterSecureStorage();
+    String? token = await storage.read(key: StringConst.token);
+    log('token $token');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<HomeProvider>(

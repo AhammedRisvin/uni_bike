@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -8,12 +9,11 @@ import 'package:uni_bike/app/utils/loading_overlay.dart';
 
 import '../../../core/app_router.dart';
 import '../../../core/server_client.dart';
-import '../../../core/string_const.dart';
 import '../../bottom_nav/view/bottom_nav_screen.dart';
 
 class AuthProvider extends ChangeNotifier {
   String otpController = '';
-
+  String encodeImage = '';
   //PROFILE PICTURE START
   File? thumbnailImage;
   Future changeProfilePhoto(bool isGallery, BuildContext context) async {
@@ -26,8 +26,13 @@ class AuthProvider extends ChangeNotifier {
       if (image == null) return;
       final imageTemporary = File(image.path);
       thumbnailImage = imageTemporary;
+      log("thumbnailImage :: $thumbnailImage");
 
       if (thumbnailImage != null) {
+        encodeImage =
+            const Base64Encoder().convert(thumbnailImage!.readAsBytesSync());
+
+        log("encodeImage :: $encodeImage");
         Routes.back();
         // uploadProfileImageToAws();
       }
@@ -87,7 +92,7 @@ class AuthProvider extends ChangeNotifier {
               "department": departmnetCntrlr.text,
               "id_number": idCntrlr.text,
               "username": nameCntrlr.text,
-              "image": "",
+              "image": encodeImage,
               "gender": genderCode
             },
             post: true);

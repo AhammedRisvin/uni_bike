@@ -7,7 +7,7 @@ import 'app/core/app_router.dart';
 import 'app/modules/auth/view/splash_screen.dart';
 import 'app/utils/extensions.dart';
 
-void main() {
+void main() async {
   runApp(const MyApp());
 }
 

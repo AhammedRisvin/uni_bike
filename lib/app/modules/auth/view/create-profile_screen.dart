@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -106,8 +106,8 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                           height: Responsive.height * 13,
                           fit: BoxFit.cover,
                         )
-                      : Image.file(
-                          provider.thumbnailImage ?? File(""),
+                      : Image.memory(
+                          const Base64Decoder().convert(provider.encodeImage),
                           fit: BoxFit.cover,
                           width: Responsive.width * 25,
                           height: Responsive.height * 13,

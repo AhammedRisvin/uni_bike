@@ -14,9 +14,9 @@ class ServerClient {
   /// Get request
 
   static Future<List> get(String url) async {
-    // String? token = await _storage.read(key: StringConst.token);
-    String? token =
-        '5dac68d93137d6ff06b582736ac2029a66d0cc1a64a19dce1450b0149ada523cea1377c615cf44c3f521cb2f8748259cbe464ae7ea7620d0d7a0fc49f844e92c7a9e39bc4dc8a0f9a3a840a2b0b193bf521f5b9c038d54517bae5831703eeabcb6573738e2bf268c5e6d8ac8ac4f8e5f391288d4da7d223da72ccd66449003eb40ffb78cf99be91309dae48215ec3193bac62402a1f9ad16ae48a9134c2feb7afc9f5dc1b97c9b8b64a1c79a600c54ff';
+    String? token = await _storage.read(key: StringConst.token);
+    // String? token =
+    //     '5dac68d93137d6ff06b582736ac2029a66d0cc1a64a19dce1450b0149ada523cea1377c615cf44c3f521cb2f8748259cbe464ae7ea7620d0d7a0fc49f844e92c7a9e39bc4dc8a0f9a3a840a2b0b193bf521f5b9c038d54517bae5831703eeabcb6573738e2bf268c5e6d8ac8ac4f8e5f391288d4da7d223da72ccd66449003eb40ffb78cf99be91309dae48215ec3193bac62402a1f9ad16ae48a9134c2feb7afc9f5dc1b97c9b8b64a1c79a600c54ff';
     log("urlll :: $url");
     Map<String, String> headers = {
       "Content-Type": "application/json",
