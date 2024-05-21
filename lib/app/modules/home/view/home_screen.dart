@@ -49,6 +49,19 @@ class _HomeScreenState extends State<HomeScreen> {
             width: 200,
             fit: BoxFit.cover,
           ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                StringConst.logout();
+              },
+              icon: const Icon(
+                Icons.logout,
+                color: AppConstants.red,
+                size: 30,
+              ),
+            ),
+            const SizeBoxV(10)
+          ],
           backgroundColor: AppConstants.black,
           toolbarHeight: 100,
           bottom: provider.isFilterShow

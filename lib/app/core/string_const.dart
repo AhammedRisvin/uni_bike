@@ -1,5 +1,8 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../modules/auth/view/splash_screen.dart';
+import 'app_router.dart';
+
 class StringConst {
   static const storage = FlutterSecureStorage();
 
@@ -11,7 +14,7 @@ class StringConst {
 
   static Future<void> logout() async {
     await storage.deleteAll();
-    // Routes.pushRemoveUntil(screen: const SplashScreen());
+    Routes.pushRemoveUntil(screen: const SplashScreen());
   }
 
   static Future<String> getUserToken() async {
