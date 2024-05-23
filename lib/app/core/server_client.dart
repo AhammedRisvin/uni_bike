@@ -51,6 +51,8 @@ class ServerClient {
       "Accept": "application/json",
       "authorization": "Bearer $token",
     };
+    log('token$token');
+    log("urlllllllllllllllllllll :: $url");
     try {
       var body = json.encode(data);
       var response = await http

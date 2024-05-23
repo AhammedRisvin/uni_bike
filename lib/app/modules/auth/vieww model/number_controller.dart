@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:uni_bike/app/core/server_client.dart';
-import 'package:uni_bike/app/core/string_const.dart';
 
 import '../../../core/app_router.dart';
+import '../../../core/string_const.dart';
+import '../../../helpers/common_widget.dart';
+import '../../bottom_nav/view/bottom_nav_screen.dart';
 import '../view/create-profile_screen.dart';
 
 class NumberController extends ChangeNotifier {
@@ -14,14 +18,32 @@ class NumberController extends ChangeNotifier {
     try {
       isLoading = true;
       notifyListeners();
-      String url = "https://rashadahmed36334401.pythonanywhere.com/login/";
+      String url = "https://unibikes.onrender.com/register";
       List response = await ServerClient.post(
         url,
-        data: {"phone": numb},
+        data: {
+          "mobileNumber": numb,
+        },
       );
+      log("response.first   ::     ${response.first}");
+      log("response.last    ::    ${response.last}");
       if (response.first >= 200 && response.first < 300) {
-        await StringConst.addUserToken(userToken: response.last['token']);
-        Routes.pushReplace(screen: const CreateProfileScreen());
+        final bool = response.last['isRegistered'];
+        StringConst.addUserPhone(userToken: response.last['mobileNumber']);
+
+        final PhoneNumber = response.last['mobileNumber'];
+
+        log("bool   ::     $bool");
+        if (!bool) {
+          Routes.push(
+              screen: CreateProfileScreen(
+            phoneNumber: PhoneNumber,
+          ));
+        } else {
+          Routes.push(screen: UniBikeBottomNav());
+          StringConst.setUserId(userId: response.last['id']);
+          toast(ctx, title: "Success", backgroundColor: Colors.green);
+        }
       } else {
         ScaffoldMessenger.of(ctx).showSnackBar(
           const SnackBar(

@@ -66,7 +66,7 @@ class _CreateRideScreenState extends State<CreateRideScreen> {
                 hintText: "Start time (24Hour Format)",
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
-                controller: TextEditingController(),
+                controller: provider.timeCntrlr,
                 radius1: 15,
                 radius2: 15,
               ),
@@ -82,25 +82,33 @@ class _CreateRideScreenState extends State<CreateRideScreen> {
                 padding: const EdgeInsets.symmetric(
                   horizontal: 10,
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
                       children: [
-                        CircleAvatar(
-                          radius: 11,
-                          backgroundColor: AppConstants.appPrimaryColor,
+                        CommonInkwell(
+                          onTap: () {
+                            provider.genderSelect("male");
+                          },
                           child: CircleAvatar(
-                            radius: 9,
-                            backgroundColor: AppConstants.black,
+                            radius: 11,
+                            backgroundColor: AppConstants.appPrimaryColor,
                             child: CircleAvatar(
-                              radius: 7,
-                              backgroundColor: AppConstants.appPrimaryColor,
+                              radius: 9,
+                              backgroundColor: AppConstants.black,
+                              child: CircleAvatar(
+                                radius: 7,
+                                backgroundColor:
+                                    provider.selectedGender == "male"
+                                        ? AppConstants.appPrimaryColor
+                                        : AppConstants.black,
+                              ),
                             ),
                           ),
                         ),
-                        SizeBoxV(10),
-                        commonTextWidget(
+                        const SizeBoxV(10),
+                        const commonTextWidget(
                           color: AppConstants.white,
                           text: "Male",
                         )
@@ -108,20 +116,28 @@ class _CreateRideScreenState extends State<CreateRideScreen> {
                     ),
                     Row(
                       children: [
-                        CircleAvatar(
-                          radius: 11,
-                          backgroundColor: AppConstants.appPrimaryColor,
+                        CommonInkwell(
+                          onTap: () {
+                            provider.genderSelect("female");
+                          },
                           child: CircleAvatar(
-                            radius: 9,
-                            backgroundColor: AppConstants.black,
+                            radius: 11,
+                            backgroundColor: AppConstants.appPrimaryColor,
                             child: CircleAvatar(
-                              radius: 7,
+                              radius: 9,
                               backgroundColor: AppConstants.black,
+                              child: CircleAvatar(
+                                radius: 7,
+                                backgroundColor:
+                                    provider.selectedGender == "female"
+                                        ? AppConstants.appPrimaryColor
+                                        : AppConstants.black,
+                              ),
                             ),
                           ),
                         ),
-                        SizeBoxV(10),
-                        commonTextWidget(
+                        const SizeBoxV(10),
+                        const commonTextWidget(
                           color: AppConstants.white,
                           text: "Female",
                         )
@@ -129,22 +145,30 @@ class _CreateRideScreenState extends State<CreateRideScreen> {
                     ),
                     Row(
                       children: [
-                        CircleAvatar(
-                          radius: 11,
-                          backgroundColor: AppConstants.appPrimaryColor,
+                        CommonInkwell(
+                          onTap: () {
+                            provider.genderSelect("Any");
+                          },
                           child: CircleAvatar(
-                            radius: 9,
-                            backgroundColor: AppConstants.black,
+                            radius: 11,
+                            backgroundColor: AppConstants.appPrimaryColor,
                             child: CircleAvatar(
-                              radius: 7,
+                              radius: 9,
                               backgroundColor: AppConstants.black,
+                              child: CircleAvatar(
+                                radius: 7,
+                                backgroundColor:
+                                    provider.selectedGender == "Any"
+                                        ? AppConstants.appPrimaryColor
+                                        : AppConstants.black,
+                              ),
                             ),
                           ),
                         ),
-                        SizeBoxV(10),
-                        commonTextWidget(
+                        const SizeBoxV(10),
+                        const commonTextWidget(
                           color: AppConstants.white,
-                          text: "Any",
+                          text: "Others",
                         )
                       ],
                     ),
@@ -163,9 +187,10 @@ class _CreateRideScreenState extends State<CreateRideScreen> {
                 hintText: "Phone Number",
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
-                controller: TextEditingController(),
+                controller: provider.phoneCntrlr,
                 radius1: 15,
                 radius2: 15,
+                maxLength: 10,
               ),
               const SizeBoxH(30),
               const commonTextWidget(
@@ -179,13 +204,15 @@ class _CreateRideScreenState extends State<CreateRideScreen> {
                 hintText: "Vehicle",
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
-                controller: TextEditingController(),
+                controller: provider.vehicleCntrlr,
                 radius1: 15,
                 radius2: 15,
               ),
               const SizeBoxH(40),
               CommonButton(
-                onTap: () {},
+                onTap: () {
+                  provider.createRideFn(context: context);
+                },
                 text: "Create Ride",
                 width: Responsive.width * 100,
                 height: Responsive.height * 6,
@@ -234,26 +261,48 @@ class DropDownWidget extends StatelessWidget {
               ),
             ],
           ),
-          items: context
-              .read<CreateRideProvider>()
-              .destinations
-              .map((String item) {
-            return DropdownMenuItem<String>(
-              value: item,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Text(
-                  item,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            );
-          }).toList(),
+          items: isFromStartPoint
+              ? context
+                  .read<CreateRideProvider>()
+                  .destinations
+                  .map((String item) {
+                  return DropdownMenuItem<String>(
+                    value: item,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        item,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  );
+                }).toList()
+              : context
+                  .read<CreateRideProvider>()
+                  .destinations
+                  .reversed
+                  .map((String item) {
+                  return DropdownMenuItem<String>(
+                    value: item,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        item,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  );
+                }).toList(),
           value: isFromStartPoint ? provider.startPoint : provider.endPoint,
           onChanged: (value) {
             isFromStartPoint

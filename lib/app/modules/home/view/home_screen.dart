@@ -1,7 +1,4 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:uni_bike/app/core/app_router.dart';
 import 'package:uni_bike/app/helpers/size_box.dart';
@@ -24,15 +21,10 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    init();
-  }
-
-  init() async {
-    const FlutterSecureStorage storage = FlutterSecureStorage();
-    String? token = await storage.read(key: StringConst.token);
-    log('token $token');
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      context.read<HomeProvider>().getAllRides(context: context, isFrom: true);
+    });
   }
 
   @override
@@ -80,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 hintText: "from",
                                 keyboardType: TextInputType.name,
                                 textInputAction: TextInputAction.next,
-                                controller: TextEditingController(),
+                                controller: provider.startPointCntrlr,
                                 radius1: 15,
                                 radius2: 15,
                               ),
@@ -92,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 hintText: "to",
                                 keyboardType: TextInputType.name,
                                 textInputAction: TextInputAction.next,
-                                controller: TextEditingController(),
+                                controller: provider.endPointCntrlr,
                                 radius1: 15,
                                 radius2: 15,
                               ),
@@ -107,6 +99,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           textColor: AppConstants.appPrimaryColor,
                           width: Responsive.width * 30,
                           height: Responsive.height * 4,
+                          onTap: () {
+                            provider.getAllRides(
+                                context: context, isFrom: false);
+                          },
                         ),
                         const SizeBoxH(10),
                       ],
@@ -141,12 +137,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       fontSize: 12,
                       width: 90,
                       onTap: () {
-                        // context.read<HomeProvider>().getEventFn(
-                        //       filter: "",
-                        //       pageNo: "",
-                        //       searchKeyword: "",
-                        //     );
-                        provider.removeFilter();
+                        context
+                            .read<HomeProvider>()
+                            .getAllRides(context: context, isFrom: true);
                         Provider.of<HomeProvider>(context, listen: false)
                             .updateSelectedContainer(SelectedContainer.all);
                       },
@@ -166,11 +159,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       fontSize: 12,
                       width: 90,
                       onTap: () {
-                        // context.read<HomeProvider>().getEventFn(
-                        //       filter: "ending",
-                        //       pageNo: "",
-                        //       searchKeyword: "",
-                        //     );
                         provider.removeFilter();
                         Provider.of<HomeProvider>(context, listen: false)
                             .updateSelectedContainer(SelectedContainer.myRide);
@@ -201,15 +189,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       shrinkWrap: true,
                       physics: const ScrollPhysics(),
                       itemBuilder: (context, index) {
+                        final allRide = provider.getAllRidesModel.rides?[
+                            (provider.getAllRidesModel.rides?.length ?? 0) -
+                                1 -
+                                index];
                         return CommonInkwell(
                           onTap: () {},
-                          child: const ActiveRidesContainer(
-                            isFromMyRide: false,
-                          ),
+                          child: ActiveRidesContainer(
+                              isFromMyRide: false, data: allRide),
                         );
                       },
                       separatorBuilder: (context, index) => const SizeBoxH(20),
-                      itemCount: 10,
+                      itemCount: provider.getAllRidesModel.rides?.length ?? 0,
                     ),
             ],
           ),

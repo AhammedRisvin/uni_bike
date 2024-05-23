@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,13 +12,24 @@ import 'package:uni_bike/app/utils/extensions.dart';
 import '../../../utils/app_constants.dart';
 
 class CreateProfileScreen extends StatefulWidget {
-  const CreateProfileScreen({super.key});
+  final String phoneNumber;
+  const CreateProfileScreen({
+    super.key,
+    required this.phoneNumber,
+  });
 
   @override
   State<CreateProfileScreen> createState() => _CreateProfileScreenState();
 }
 
 class _CreateProfileScreenState extends State<CreateProfileScreen> {
+  @override
+  void initState() {
+    super.initState();
+    log("widget.phoneNumber   ::     ${widget.phoneNumber}");
+    context.read<AuthProvider>().phoneCntrlr.text = widget.phoneNumber;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,6 +140,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 hintText: "phone number",
                 keyboardType: TextInputType.phone,
                 maxLength: 10,
+                readOnly: true,
                 textInputAction: TextInputAction.next,
                 controller: provider.phoneCntrlr,
               ),

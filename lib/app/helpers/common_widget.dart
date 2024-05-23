@@ -156,6 +156,7 @@ class CommonTextFormField extends StatelessWidget {
   final double radius1;
   final double radius2;
   final String counterText;
+  final bool readOnly;
 
   const CommonTextFormField(
       {super.key,
@@ -173,6 +174,7 @@ class CommonTextFormField extends StatelessWidget {
       this.radius1 = 100,
       this.radius2 = 100,
       this.counterText = '',
+      this.readOnly = false,
       this.maxLines = 1});
 
   @override
@@ -187,6 +189,7 @@ class CommonTextFormField extends StatelessWidget {
       obscureText: obscureText,
       textInputAction: textInputAction,
       maxLines: maxLines,
+      readOnly: readOnly,
       decoration: InputDecoration(
         counterText: '',
         contentPadding: contentPadding,

@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:uni_bike/app/modules/create%20ride/model/get_all-rides_moidel.dart';
 
 import '../../../helpers/common_widget.dart';
 import '../../../helpers/size_box.dart';
@@ -9,9 +12,11 @@ import '../view/home_screen.dart';
 class ActiveRidesContainer extends StatelessWidget {
   // final EventDatum? eventData;
   final bool isFromMyRide;
+  final Ride? data;
   const ActiveRidesContainer({
     super.key,
     this.isFromMyRide = false,
+    this.data,
   });
 
   @override
@@ -41,11 +46,15 @@ class ActiveRidesContainer extends StatelessWidget {
                   const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
               child: Row(
                 children: [
-                  commonNetworkImage(
-                    url:
-                        "https://cdn.dribbble.com/userupload/11926943/file/original-f0aeaf93e5bcacfe266c1df05322b95c.jpg?crop=1051x0-5347x3222&resize=400x300&vertical=center",
-                    height: Responsive.height * 10,
-                    width: Responsive.width * 25,
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.memory(
+                      const Base64Decoder()
+                          .convert(data?.userId?.profilePicture ?? ""),
+                      fit: BoxFit.cover,
+                      width: Responsive.width * 25,
+                      height: Responsive.height * 13,
+                    ),
                   ),
                   const SizeBoxV(20),
                   Expanded(
@@ -55,9 +64,9 @@ class ActiveRidesContainer extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          const commonTextWidget(
+                          commonTextWidget(
                             color: AppConstants.white,
-                            text: "creater name",
+                            text: data?.userId?.fullName ?? "crater name",
                             fontSize: 18,
                             fontWeight: FontWeight.w700,
                           ),
@@ -71,9 +80,9 @@ class ActiveRidesContainer extends StatelessWidget {
                                     height: 12,
                                   ),
                                   const SizeBoxV(5),
-                                  const commonTextWidget(
+                                  commonTextWidget(
                                     color: AppConstants.white,
-                                    text: "10.00 Am",
+                                    text: data?.startTime ?? "10.00 Am",
                                     fontSize: 11,
                                     fontWeight: FontWeight.w700,
                                   ),
@@ -87,14 +96,14 @@ class ActiveRidesContainer extends StatelessWidget {
                               ),
                             ],
                           ),
-                          const Row(
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               commonTextWidget(
                                 color: AppConstants.white,
                                 align: TextAlign.start,
                                 maxLines: 1,
-                                text: "bike details",
+                                text: data?.vehicleType ?? "bike details",
                                 overFlow: TextOverflow.ellipsis,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
@@ -103,7 +112,7 @@ class ActiveRidesContainer extends StatelessWidget {
                                 color: AppConstants.white,
                                 align: TextAlign.start,
                                 maxLines: 1,
-                                text: "Male",
+                                text: data?.genderPreference ?? "Male",
                                 overFlow: TextOverflow.ellipsis,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
@@ -118,15 +127,15 @@ class ActiveRidesContainer extends StatelessWidget {
               ),
             ),
             SizeBoxH(Responsive.height * 1),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15.0),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   commonTextWidget(
                     color: AppConstants.white,
                     align: TextAlign.start,
-                    text: "+919747489556",
+                    text: "+91 ${data?.phoneNumber.toString()}",
                     overFlow: TextOverflow.ellipsis,
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
@@ -147,10 +156,10 @@ class ActiveRidesContainer extends StatelessWidget {
                         height: 12,
                       ),
                       const SizeBoxV(5),
-                      const commonTextWidget(
+                      commonTextWidget(
                         color: AppConstants.white,
                         align: TextAlign.start,
-                        text: "Ponlait",
+                        text: data?.startPoint ?? "",
                         overFlow: TextOverflow.ellipsis,
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
@@ -167,9 +176,9 @@ class ActiveRidesContainer extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      const commonTextWidget(
+                      commonTextWidget(
                         color: AppConstants.white,
-                        text: "Main Gate",
+                        text: data?.endPoint ?? "",
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
                       ),
@@ -190,14 +199,14 @@ class ActiveRidesContainer extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CommonBannerButtonWidget(
-                        bgColor: AppConstants.appPrimaryColor,
-                        text: "Show intrest",
-                        borderColor: AppConstants.appPrimaryColor,
-                        textColor: AppConstants.black,
-                        width: Responsive.width * 35,
-                        height: Responsive.height * 4,
-                        radius: 8,
-                      ),
+                          bgColor: AppConstants.appPrimaryColor,
+                          text: "Show intrest",
+                          borderColor: AppConstants.appPrimaryColor,
+                          textColor: AppConstants.black,
+                          width: Responsive.width * 35,
+                          height: Responsive.height * 4,
+                          radius: 8,
+                          onTap: () {}),
                     ],
                   )
           ],

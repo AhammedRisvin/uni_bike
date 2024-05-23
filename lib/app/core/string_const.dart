@@ -17,11 +17,11 @@ class StringConst {
     Routes.pushRemoveUntil(screen: const SplashScreen());
   }
 
-  static Future<String> getUserToken() async {
+  static Future<String> getUserPhone() async {
     return await storage.read(key: token) ?? "";
   }
 
-  static Future<void> addUserToken({required String userToken}) async {
+  static Future<void> addUserPhone({required String userToken}) async {
     await storage.write(key: token, value: userToken);
   }
 

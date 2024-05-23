@@ -1,15 +1,26 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:uni_bike/app/utils/loading_overlay.dart';
+
+import '../../../core/server_client.dart';
+import '../../../core/string_const.dart';
+import '../../../helpers/common_widget.dart';
 
 class CreateRideProvider extends ChangeNotifier {
   final List<String> destinations = [
-    'Item1',
-    'Item2',
-    'Item3',
-    'Item4',
-    'Item5',
-    'Item6',
-    'Item7',
-    'Item8',
+    'Outer circle',
+    'Sj',
+    'Cv raman',
+    'Valmiky hostel ',
+    'Tiruvallur stafium',
+    'Rajiv gandhi stadium',
+    'Narmadha',
+    'Health centre ',
+    "Ponlait",
+    "Gate2",
+    "Reading room",
+    "Gate 1"
   ];
   String? startPoint;
 
@@ -24,4 +35,77 @@ class CreateRideProvider extends ChangeNotifier {
   }
 
   String? endPoint;
+
+  String selectedGender = '';
+
+  void genderSelect(String gender) {
+    selectedGender = gender;
+    notifyListeners();
+  }
+
+  TextEditingController phoneCntrlr = TextEditingController();
+  TextEditingController timeCntrlr = TextEditingController();
+  TextEditingController vehicleCntrlr = TextEditingController();
+
+  Future<void> createRideFn({required BuildContext context}) async {
+    if (vehicleCntrlr.text.isEmpty) {
+      toast(context, title: "vehicle is empty", backgroundColor: Colors.red);
+    } else if (timeCntrlr.text.isEmpty) {
+      toast(context, title: "ime is empty", backgroundColor: Colors.red);
+    } else if (phoneCntrlr.text.isEmpty) {
+      toast(context,
+          title: "Phone number is empty", backgroundColor: Colors.red);
+    } else if (startPoint == null) {
+      toast(context,
+          title: "Start point is empty", backgroundColor: Colors.red);
+    } else if (endPoint == null) {
+      toast(context, title: "End point is empty", backgroundColor: Colors.red);
+    } else if (selectedGender.isEmpty) {
+      toast(context, title: "Select any gender ", backgroundColor: Colors.red);
+    } else {
+      LoadingOverlay.of(context).show();
+
+      final UserId = await StringConst.getUserID();
+      try {
+        List response =
+            await ServerClient.post("https://unibikes.onrender.com/create-ride",
+                data: {
+                  "startPoint": startPoint,
+                  "endPoint": endPoint,
+                  "startTime": timeCntrlr.text,
+                  "genderPreference": selectedGender,
+                  "vehicleType": vehicleCntrlr.text,
+                  "phoneNumber": phoneCntrlr.text,
+                  "userId": UserId,
+                },
+                post: true);
+
+        log("slot1111  ::${response.last}");
+        log("slot222  ::${response.first}");
+        if (response.first >= 200 && response.first < 300) {
+          timeCntrlr.clear();
+          phoneCntrlr.clear();
+          vehicleCntrlr.clear();
+          selectedGender = '';
+          startPoint = null;
+          endPoint = null;
+          LoadingOverlay.of(context).hide();
+          toast(context, title: "Success", backgroundColor: Colors.green);
+
+          notifyListeners();
+        } else {
+          LoadingOverlay.of(context).hide();
+          throw Exception('Failed to fetch posts');
+        }
+      } catch (e) {
+        LoadingOverlay.of(context).hide();
+        notifyListeners();
+        throw Exception('Failed to fetch posts');
+      } finally {
+        LoadingOverlay.of(context).hide();
+
+        notifyListeners();
+      }
+    }
+  }
 }

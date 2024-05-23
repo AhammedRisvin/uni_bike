@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:uni_bike/app/modules/home/view/home_screen.dart';
 
 import '../../create ride/view/create_ride_scree.dart';
+import '../../home/view/profile_screen.dart';
 
 class BottomNavProvider extends ChangeNotifier {
   //BOTTOM NAV
-  final screens = [const HomeScreen(), const CreateRideScreen()];
+  final screens = [
+    const HomeScreen(),
+    const CreateRideScreen(),
+    const ProfileScreen()
+  ];
 
   int _selectedIndex = 0;
 

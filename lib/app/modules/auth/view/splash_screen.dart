@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:uni_bike/app/utils/app_constants.dart';
 
@@ -22,13 +24,14 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> initialize() async {
-    String userToken = await StringConst.getUserToken();
-    // String isFromMemberLogin = await StringConst.getIsFromMemberLogin();
+    final userId = await StringConst.getUserID();
+
+    log("userId :: $userId");
 
     Future.delayed(
       const Duration(milliseconds: 2000),
       () {
-        if (userToken.isNotEmpty) {
+        if (userId.isNotEmpty) {
           Routes.pushRemoveUntil(screen: UniBikeBottomNav());
         } else {
           // Routes.pushRemoveUntil(screen: const OnboardingScreen());

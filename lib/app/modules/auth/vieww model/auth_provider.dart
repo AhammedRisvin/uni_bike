@@ -73,27 +73,16 @@ class AuthProvider extends ChangeNotifier {
     } else {
       LoadingOverlay.of(context).show();
       try {
-        String? genderCode;
-
-        if (selectedGender == "Male") {
-          genderCode = "M";
-        } else if (selectedGender == "Fenale") {
-          genderCode = "F";
-        } else {
-          genderCode = "N";
-        }
-
         List response = await ServerClient.post(
-            "http://rashadahmed36334401.pythonanywhere.com/users/",
+            "https://unibikes.onrender.com/create-profile",
             data: {
-              "full_name": nameCntrlr.text,
-              "phone_number": phoneCntrlr.text,
-              "hostel": branchCntrlr.text,
-              "department": departmnetCntrlr.text,
-              "id_number": idCntrlr.text,
-              "username": nameCntrlr.text,
-              "image": encodeImage,
-              "gender": genderCode
+              "fullName": nameCntrlr.text,
+              "mobileNumber": phoneCntrlr.text,
+              "hostelName": branchCntrlr.text,
+              "departMent": departmnetCntrlr.text,
+              "collegeId": idCntrlr.text,
+              "profilePicture": encodeImage,
+              "gender": selectedGender
             },
             post: true);
 

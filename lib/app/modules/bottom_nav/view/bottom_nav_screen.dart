@@ -55,7 +55,7 @@ class _UniBikeBottomNavState extends State<UniBikeBottomNav> {
                     activeColor: AppConstants.black,
                     iconSize: 24,
                     padding: EdgeInsets.symmetric(
-                      horizontal: Responsive.width * 12,
+                      horizontal: Responsive.width * 5,
                       vertical: Responsive.height * 2,
                     ),
                     duration: const Duration(milliseconds: 400),
@@ -73,6 +73,12 @@ class _UniBikeBottomNavState extends State<UniBikeBottomNav> {
                             ? IconlyBold.bag
                             : IconlyLight.bag,
                         text: 'Ride',
+                      ),
+                      GButton(
+                        icon: selectedIndex == 3
+                            ? IconlyBold.profile
+                            : IconlyLight.profile,
+                        text: 'Profile',
                       ),
                     ],
                     selectedIndex: selectedIndex,
