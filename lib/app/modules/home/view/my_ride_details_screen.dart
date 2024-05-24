@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:uni_bike/app/helpers/size_box.dart';
+import 'package:uni_bike/app/modules/create%20ride/model/get_all-rides_moidel.dart';
+import 'package:uni_bike/app/modules/home/view%20model/home_provider.dart';
 import 'package:uni_bike/app/modules/home/view/home_screen.dart';
 import 'package:uni_bike/app/utils/extensions.dart';
 
@@ -9,13 +12,24 @@ import '../../../utils/app_constants.dart';
 import '../widget/active_rides_container.dart';
 
 class MyRideDetailsScreen extends StatefulWidget {
-  const MyRideDetailsScreen({super.key});
+  final Ride? data;
+  const MyRideDetailsScreen({
+    super.key,
+    this.data,
+  });
 
   @override
   State<MyRideDetailsScreen> createState() => _MyRideDetailsScreenState();
 }
 
 class _MyRideDetailsScreenState extends State<MyRideDetailsScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    context.read<HomeProvider>().getMyRideFn(ctx: context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +60,9 @@ class _MyRideDetailsScreenState extends State<MyRideDetailsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizeBoxH(30),
-            const ActiveRidesContainer(),
+            ActiveRidesContainer(
+              data: widget.data,
+            ),
             const SizeBoxH(30),
             const commonTextWidget(
               color: AppConstants.white,
@@ -61,6 +77,7 @@ class _MyRideDetailsScreenState extends State<MyRideDetailsScreen> {
               shrinkWrap: true,
               physics: const ScrollPhysics(),
               itemBuilder: (context, index) {
+                final showIntrestData = widget.data?.showIntrests?[index];
                 return Container(
                   width: Responsive.width * 100,
                   padding: const EdgeInsets.symmetric(
@@ -190,7 +207,7 @@ class _MyRideDetailsScreenState extends State<MyRideDetailsScreen> {
                 );
               },
               separatorBuilder: (context, index) => const SizeBoxH(15),
-              itemCount: 10,
+              itemCount: widget.data?.showIntrests?.length ?? 0,
             ),
             const SizeBoxH(30),
           ],

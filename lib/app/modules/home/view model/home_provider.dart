@@ -150,6 +150,7 @@ class HomeProvider extends ChangeNotifier {
           if (response.first >= 200 && response.first < 300) {
             getAllRidesModel = GetAllRidesModel.fromJson(response.last);
             getAllRidesStatus = GetAllRidesStatus.loaded;
+            notifyListeners();
           } else {
             getAllRidesStatus = GetAllRidesStatus.error;
           }
@@ -163,9 +164,14 @@ class HomeProvider extends ChangeNotifier {
     }
   }
 
+  GetAllRidesModel getMyRidesModel = GetAllRidesModel();
+
+  MyRidesStatus myRidesStatus = MyRidesStatus.initial;
+
   Future<void> getMyRideFn({
     required BuildContext ctx,
   }) async {
+    myRidesStatus = MyRidesStatus.loading;
     final id = await StringConst.getUserID();
     log("idddd   ::     $id");
     try {
@@ -180,21 +186,35 @@ class HomeProvider extends ChangeNotifier {
       log("response.first   ::     ${response.first}");
       log("response.last    ::    ${response.last}");
       if (response.first >= 200 && response.first < 300) {
-      } else {}
+        getMyRidesModel = GetAllRidesModel.fromJson(response.last);
+        // log("getMyRidesModel   ::     ${getMyRidesModel.myRides?.length}");
+        log("getMyRidesModel   ::     ${getMyRidesModel.rides?.length}");
+
+        myRidesStatus = MyRidesStatus.loaded;
+
+        notifyListeners();
+      } else {
+        myRidesStatus = MyRidesStatus.error;
+        throw Exception('Failed to fetch posts');
+      }
     } catch (e) {
+      myRidesStatus = MyRidesStatus.error;
       debugPrint(e.toString());
     } finally {
       notifyListeners();
     }
   }
 
+  dynamic profileModel;
+  ProfileStatus profileStatus = ProfileStatus.initial;
+
   Future<void> getProfileFn({
     required BuildContext ctx,
   }) async {
+    profileStatus = ProfileStatus.loading;
     final id = await StringConst.getUserID();
     log("idddd   ::     $id");
     try {
-      notifyListeners();
       String url = "https://unibikes.onrender.com/get-user";
       List response = await ServerClient.post(
         url,
@@ -205,8 +225,56 @@ class HomeProvider extends ChangeNotifier {
       log("response.first   ::     ${response.first}");
       log("response.last    ::    ${response.last}");
       if (response.first >= 200 && response.first < 300) {
-      } else {}
+        try {
+          profileModel = response.last["user"];
+          log("phone   ::     ${response.last["user"]['mobileNumber']}");
+          log(" depa  ::     ${response.last["user"]["departMent"]}");
+          profileStatus = ProfileStatus.loaded;
+        } catch (e) {
+          log("error in profileModel  ::     $e");
+          profileStatus = ProfileStatus.error;
+        }
+
+        notifyListeners();
+      } else {
+        profileStatus = ProfileStatus.error;
+        throw Exception('Failed to fetch posts');
+      }
     } catch (e) {
+      profileStatus = ProfileStatus.error;
+      debugPrint(e.toString());
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  Future<void> showInterest({
+    required BuildContext ctx,
+    required String rideId,
+  }) async {
+    LoadingOverlay.of(ctx).show();
+    final id = await StringConst.getUserID();
+    log("idddd   ::     $id");
+    try {
+      notifyListeners();
+      String url = "https://unibikes.onrender.com/show-intrest";
+      List response = await ServerClient.post(
+        url,
+        data: {"id": id, "rideId": rideId},
+      );
+      log("response.first   ::     ${response.first}");
+      log("response.last    ::    ${response.last}");
+      if (response.first >= 200 && response.first < 300) {
+        toast(ctx, title: "Success", backgroundColor: Colors.green);
+        LoadingOverlay.of(ctx).hide();
+        notifyListeners();
+      } else {
+        LoadingOverlay.of(ctx).hide();
+        toast(ctx, title: "Failed", backgroundColor: Colors.red);
+        throw Exception('Failed to fetch posts');
+      }
+    } catch (e) {
+      LoadingOverlay.of(ctx).hide();
       debugPrint(e.toString());
     } finally {
       notifyListeners();

@@ -4,6 +4,7 @@ import 'package:uni_bike/app/core/app_router.dart';
 import 'package:uni_bike/app/helpers/size_box.dart';
 import 'package:uni_bike/app/modules/home/view%20model/home_provider.dart';
 import 'package:uni_bike/app/utils/app_constants.dart';
+import 'package:uni_bike/app/utils/enums.dart';
 
 import '../../../core/string_const.dart';
 import '../../../helpers/common_widget.dart';
@@ -140,6 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         context
                             .read<HomeProvider>()
                             .getAllRides(context: context, isFrom: true);
+                        provider.removeFilter();
                         Provider.of<HomeProvider>(context, listen: false)
                             .updateSelectedContainer(SelectedContainer.all);
                       },
@@ -159,6 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       fontSize: 12,
                       width: 90,
                       onTap: () {
+                        context.read<HomeProvider>().getMyRideFn(ctx: context);
                         provider.removeFilter();
                         Provider.of<HomeProvider>(context, listen: false)
                             .updateSelectedContainer(SelectedContainer.myRide);
@@ -170,38 +173,69 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               SizeBoxH(Responsive.height * 2),
               provider.selectedContainer == SelectedContainer.myRide
-                  ? ListView.separated(
-                      shrinkWrap: true,
-                      physics: const ScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return CommonInkwell(
-                            onTap: () {
-                              Routes.push(screen: const MyRideDetailsScreen());
-                            },
-                            child: const ActiveRidesContainer(
-                              isFromMyRide: true,
-                            ));
-                      },
-                      separatorBuilder: (context, index) => const SizeBoxH(20),
-                      itemCount: 1,
-                    )
-                  : ListView.separated(
-                      shrinkWrap: true,
-                      physics: const ScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        final allRide = provider.getAllRidesModel.rides?[
-                            (provider.getAllRidesModel.rides?.length ?? 0) -
-                                1 -
-                                index];
-                        return CommonInkwell(
-                          onTap: () {},
-                          child: ActiveRidesContainer(
-                              isFromMyRide: false, data: allRide),
-                        );
-                      },
-                      separatorBuilder: (context, index) => const SizeBoxH(20),
-                      itemCount: provider.getAllRidesModel.rides?.length ?? 0,
-                    ),
+                  ? provider.myRidesStatus == MyRidesStatus.loading
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: AppConstants.appPrimaryColor,
+                          ),
+                        )
+                      : provider.myRidesStatus == MyRidesStatus.loaded
+                          ? ListView.separated(
+                              shrinkWrap: true,
+                              physics: const ScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                final myRide =
+                                    provider.getMyRidesModel.rides?[index];
+
+                                return CommonInkwell(
+                                    onTap: () {
+                                      Routes.push(
+                                          screen: MyRideDetailsScreen(
+                                        data: myRide,
+                                      ));
+                                    },
+                                    child: ActiveRidesContainer(
+                                      isFromMyRide: true,
+                                      data: myRide,
+                                    ));
+                              },
+                              separatorBuilder: (context, index) =>
+                                  const SizeBoxH(20),
+                              itemCount:
+                                  provider.getMyRidesModel.rides?.length ?? 0,
+                            )
+                          : const Text(
+                              "No Rides Found",
+                            )
+                  : provider.myRidesStatus == MyRidesStatus.loading
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: AppConstants.appPrimaryColor,
+                          ),
+                        )
+                      : provider.myRidesStatus == MyRidesStatus.loaded
+                          ? ListView.separated(
+                              shrinkWrap: true,
+                              physics: const ScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                final allRide = provider
+                                        .getAllRidesModel.rides?[
+                                    (provider.getAllRidesModel.rides?.length ??
+                                            0) -
+                                        1 -
+                                        index];
+                                return CommonInkwell(
+                                  onTap: () {},
+                                  child: ActiveRidesContainer(
+                                      isFromMyRide: false, data: allRide),
+                                );
+                              },
+                              separatorBuilder: (context, index) =>
+                                  const SizeBoxH(20),
+                              itemCount:
+                                  provider.getAllRidesModel.rides?.length ?? 0,
+                            )
+                          : const Text("No Rides Found"),
             ],
           ),
         ),

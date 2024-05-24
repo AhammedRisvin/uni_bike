@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:uni_bike/app/modules/create%20ride/model/get_all-rides_moidel.dart';
+import 'package:uni_bike/app/modules/home/view%20model/home_provider.dart';
 
 import '../../../helpers/common_widget.dart';
 import '../../../helpers/size_box.dart';
@@ -199,14 +201,20 @@ class ActiveRidesContainer extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CommonBannerButtonWidget(
-                          bgColor: AppConstants.appPrimaryColor,
-                          text: "Show intrest",
-                          borderColor: AppConstants.appPrimaryColor,
-                          textColor: AppConstants.black,
-                          width: Responsive.width * 35,
-                          height: Responsive.height * 4,
-                          radius: 8,
-                          onTap: () {}),
+                        bgColor: AppConstants.appPrimaryColor,
+                        text: "Show intrest",
+                        borderColor: AppConstants.appPrimaryColor,
+                        textColor: AppConstants.black,
+                        width: Responsive.width * 35,
+                        height: Responsive.height * 4,
+                        radius: 8,
+                        onTap: () {
+                          context.read<HomeProvider>().showInterest(
+                                ctx: context,
+                                rideId: data?.id ?? "",
+                              );
+                        },
+                      ),
                     ],
                   )
           ],

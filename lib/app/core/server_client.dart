@@ -52,6 +52,7 @@ class ServerClient {
       "authorization": "Bearer $token",
     };
     log('token$token');
+    log("{data} :: $data");
     log("urlllllllllllllllllllll :: $url");
     try {
       var body = json.encode(data);
