@@ -89,22 +89,23 @@ class CreateRideProvider extends ChangeNotifier {
           selectedGender = '';
           startPoint = null;
           endPoint = null;
+
           LoadingOverlay.of(context).hide();
+
           toast(context, title: "Success", backgroundColor: Colors.green);
 
           notifyListeners();
         } else {
           LoadingOverlay.of(context).hide();
-          throw Exception('Failed to fetch posts');
+          log('Failed to create ride: ${response.first}');
+          toast(context,
+              title: "Failed to create ride", backgroundColor: Colors.red);
         }
       } catch (e) {
         LoadingOverlay.of(context).hide();
-        notifyListeners();
-        throw Exception('Failed to fetch posts');
-      } finally {
-        LoadingOverlay.of(context).hide();
-
-        notifyListeners();
+        log('Error creating ride: $e');
+        toast(context,
+            title: "Error creating ride", backgroundColor: Colors.red);
       }
     }
   }
