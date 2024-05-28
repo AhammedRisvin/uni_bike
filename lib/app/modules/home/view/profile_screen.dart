@@ -8,6 +8,7 @@ import 'package:uni_bike/app/modules/home/view%20model/home_provider.dart';
 import 'package:uni_bike/app/utils/enums.dart';
 import 'package:uni_bike/app/utils/extensions.dart';
 
+import '../../../core/string_const.dart';
 import '../../../utils/app_constants.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -165,6 +166,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                           const SizeBoxH(10),
+                          const SizeBoxH(20),
+                          CommonButton(
+                            onTap: () {
+                              StringConst.logout();
+                            },
+                            text: "Logout",
+                            width: Responsive.width * 100,
+                            height: Responsive.height * 6,
+                            bgColor: Colors.red,
+                            textColor: Colors.white,
+                          )
                         ],
                       ),
                     )

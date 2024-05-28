@@ -6,7 +6,6 @@ import 'package:uni_bike/app/modules/home/view%20model/home_provider.dart';
 import 'package:uni_bike/app/utils/app_constants.dart';
 import 'package:uni_bike/app/utils/enums.dart';
 
-import '../../../core/string_const.dart';
 import '../../../helpers/common_widget.dart';
 import '../../../utils/extensions.dart';
 import '../widget/active_rides_container.dart';
@@ -42,72 +41,113 @@ class _HomeScreenState extends State<HomeScreen> {
             width: 200,
             fit: BoxFit.cover,
           ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                StringConst.logout();
-              },
-              icon: const Icon(
-                Icons.logout,
-                color: AppConstants.red,
-                size: 30,
-              ),
-            ),
-            const SizeBoxV(10)
-          ],
+          // actions: [
+          //   IconButton(
+          //     onPressed: () {
+          //       StringConst.logout();
+          //     },
+          //     icon: const Icon(
+          //       Icons.logout,
+          //       color: AppConstants.red,
+          //       size: 30,
+          //     ),
+          //   ),
+          //   const SizeBoxV(10)
+          // ],
           backgroundColor: AppConstants.black,
-          toolbarHeight: 100,
+          toolbarHeight: Responsive.height * 20,
           bottom: provider.isFilterShow
               ? PreferredSize(
                   preferredSize: const Size.fromHeight(100),
-                  child: Container(
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            SizedBox(
-                              width: Responsive.width * 40,
-                              child: CommonTextFormField(
-                                bgColor: AppConstants.teleContainerBg,
-                                hintText: "from",
-                                keyboardType: TextInputType.name,
-                                textInputAction: TextInputAction.next,
-                                controller: provider.startPointCntrlr,
-                                radius1: 15,
-                                radius2: 15,
-                              ),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        width: Responsive.width * 90,
+                        child: DropdownButtonFormField<String>(
+                          dropdownColor: AppConstants.teleContainerBg,
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: AppConstants.teleContainerBg,
+                            hintText: "From",
+                            hintStyle: const TextStyle(
+                              color: Colors.white,
                             ),
-                            SizedBox(
-                              width: Responsive.width * 40,
-                              child: CommonTextFormField(
-                                bgColor: AppConstants.teleContainerBg,
-                                hintText: "to",
-                                keyboardType: TextInputType.name,
-                                textInputAction: TextInputAction.next,
-                                controller: provider.endPointCntrlr,
-                                radius1: 15,
-                                radius2: 15,
-                              ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide.none,
                             ),
-                          ],
-                        ),
-                        const SizeBoxH(10),
-                        CommonBannerButtonWidget(
-                          bgColor: AppConstants.transparent,
-                          text: "Filter",
-                          borderColor: AppConstants.appPrimaryColor,
-                          textColor: AppConstants.appPrimaryColor,
-                          width: Responsive.width * 30,
-                          height: Responsive.height * 4,
-                          onTap: () {
-                            provider.getAllRides(
-                                context: context, isFrom: false);
+                          ),
+                          value: provider.startPointCntrlr.text.isNotEmpty
+                              ? provider.startPointCntrlr.text
+                              : null,
+                          onChanged: (String? newValue) {
+                            provider.startPointCntrlr.text = newValue!;
                           },
+                          items:
+                              provider.destinations.map((String destination) {
+                            return DropdownMenuItem<String>(
+                              value: destination,
+                              child: Text(
+                                destination,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            );
+                          }).toList(),
                         ),
-                        const SizeBoxH(10),
-                      ],
-                    ),
+                      ),
+                      const SizeBoxH(10),
+                      SizedBox(
+                        width: Responsive.width * 90,
+                        child: DropdownButtonFormField<String>(
+                          dropdownColor: AppConstants.teleContainerBg,
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: AppConstants.teleContainerBg,
+                            hintText: "To",
+                            hintStyle: const TextStyle(
+                              color: Colors.white,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                          value: provider.endPointCntrlr.text.isNotEmpty
+                              ? provider.endPointCntrlr.text
+                              : null,
+                          onChanged: (String? newValue) {
+                            provider.endPointCntrlr.text = newValue!;
+                          },
+                          items: provider.destinations.reversed
+                              .map((String destination) {
+                            return DropdownMenuItem<String>(
+                              value: destination,
+                              child: Text(
+                                destination,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      const SizeBoxH(10),
+                      CommonBannerButtonWidget(
+                        bgColor: AppConstants.transparent,
+                        text: "Filter",
+                        borderColor: AppConstants.appPrimaryColor,
+                        textColor: AppConstants.appPrimaryColor,
+                        width: Responsive.width * 30,
+                        height: Responsive.height * 4,
+                        onTap: () {
+                          provider.getAllRides(context: context, isFrom: false);
+                        },
+                      ),
+                      const SizeBoxH(10),
+                    ],
                   ),
                 )
               : PreferredSize(

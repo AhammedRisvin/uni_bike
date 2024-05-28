@@ -12,6 +12,21 @@ import '../../create ride/model/get_all-rides_moidel.dart';
 class HomeProvider extends ChangeNotifier {
   // selecting between 2 containers start
 
+  final List<String> destinations = [
+    'Outer circle',
+    'Sj',
+    'Cv raman',
+    'Valmiky hostel ',
+    'Tiruvallur stafium',
+    'Rajiv gandhi stadium',
+    'Narmadha',
+    'Health centre ',
+    "Ponlait",
+    "Gate2",
+    "Reading room",
+    "Gate 1"
+  ];
+
   SelectedContainer _selectedContainer = SelectedContainer.all;
 
   SelectedContainer get selectedContainer => _selectedContainer;
