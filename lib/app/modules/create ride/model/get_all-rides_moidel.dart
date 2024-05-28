@@ -40,7 +40,7 @@ class Ride {
   String? vehicleType;
   int? phoneNumber;
   UserId? userId;
-  List<dynamic>? showIntrests;
+  List<UserId>? showIntrests;
   int? v;
 
   Ride({
@@ -67,7 +67,8 @@ class Ride {
         userId: json["userId"] == null ? null : UserId.fromJson(json["userId"]),
         showIntrests: json["showIntrests"] == null
             ? []
-            : List<dynamic>.from(json["showIntrests"]!.map((x) => x)),
+            : List<UserId>.from(
+                json["showIntrests"]!.map((x) => UserId.fromJson(x))),
         v: json["__v"],
       );
 
@@ -82,7 +83,7 @@ class Ride {
         "userId": userId?.toJson(),
         "showIntrests": showIntrests == null
             ? []
-            : List<dynamic>.from(showIntrests!.map((x) => x)),
+            : List<dynamic>.from(showIntrests!.map((x) => x.toJson())),
         "__v": v,
       };
 }

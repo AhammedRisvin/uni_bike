@@ -207,13 +207,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           : const Text(
                               "No Rides Found",
                             )
-                  : provider.myRidesStatus == MyRidesStatus.loading
+                  : provider.getAllRidesStatus == GetAllRidesStatus.loading
                       ? const Center(
                           child: CircularProgressIndicator(
                             color: AppConstants.appPrimaryColor,
                           ),
                         )
-                      : provider.myRidesStatus == MyRidesStatus.loaded
+                      : provider.getAllRidesStatus == GetAllRidesStatus.loaded
                           ? ListView.separated(
                               shrinkWrap: true,
                               physics: const ScrollPhysics(),

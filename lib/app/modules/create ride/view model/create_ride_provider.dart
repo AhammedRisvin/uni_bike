@@ -51,7 +51,7 @@ class CreateRideProvider extends ChangeNotifier {
     if (vehicleCntrlr.text.isEmpty) {
       toast(context, title: "vehicle is empty", backgroundColor: Colors.red);
     } else if (timeCntrlr.text.isEmpty) {
-      toast(context, title: "ime is empty", backgroundColor: Colors.red);
+      toast(context, title: "time is empty", backgroundColor: Colors.red);
     } else if (phoneCntrlr.text.isEmpty) {
       toast(context,
           title: "Phone number is empty", backgroundColor: Colors.red);

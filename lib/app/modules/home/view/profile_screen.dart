@@ -70,6 +70,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               alignment: Alignment.centerLeft,
                               child: commonTextWidget(
                                   color: AppConstants.white,
+                                  text: provider.profileModel["fullName"]
+                                      .toString()),
+                            ),
+                          ),
+                          const SizeBoxH(10),
+                          Container(
+                            width: Responsive.width * 100,
+                            height: Responsive.height * 6,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: Responsive.width * 5),
+                            decoration: BoxDecoration(
+                              color: AppConstants.drawerBgColor,
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: commonTextWidget(
+                                  color: AppConstants.white,
                                   text: provider.profileModel["mobileNumber"]
                                       .toString()),
                             ),

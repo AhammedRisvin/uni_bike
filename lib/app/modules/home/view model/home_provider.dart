@@ -106,7 +106,6 @@ class HomeProvider extends ChangeNotifier {
     if (isFrom) {
       getAllRidesStatus = GetAllRidesStatus.loading;
       try {
-        notifyListeners();
         String url = "https://unibikes.onrender.com/get-rides";
         List response = await ServerClient.post(
           url,
@@ -118,9 +117,14 @@ class HomeProvider extends ChangeNotifier {
         log("response.first   ::     ${response.first}");
         log("response.last    ::    ${response.last}");
         if (response.first >= 200 && response.first < 300) {
+          log("hiiiiiiiiiiii");
           getAllRidesModel = GetAllRidesModel.fromJson(response.last);
+          log("hiiiiiiiiiiii2  ${getAllRidesModel.rides?.length}");
+
           getAllRidesStatus = GetAllRidesStatus.loaded;
+          notifyListeners();
         } else {
+          log("error in getAllRidesModel  ::     ${response.last}");
           getAllRidesStatus = GetAllRidesStatus.error;
         }
       } catch (e) {
@@ -149,6 +153,7 @@ class HomeProvider extends ChangeNotifier {
           log("response.last    ::    ${response.last}");
           if (response.first >= 200 && response.first < 300) {
             getAllRidesModel = GetAllRidesModel.fromJson(response.last);
+            log("length   :: ${getAllRidesModel.rides}");
             getAllRidesStatus = GetAllRidesStatus.loaded;
             notifyListeners();
           } else {

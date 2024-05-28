@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uni_bike/app/helpers/size_box.dart';
@@ -62,6 +64,7 @@ class _MyRideDetailsScreenState extends State<MyRideDetailsScreen> {
             const SizeBoxH(30),
             ActiveRidesContainer(
               data: widget.data,
+              isFromMyRide: true,
             ),
             const SizeBoxH(30),
             const commonTextWidget(
@@ -92,12 +95,15 @@ class _MyRideDetailsScreenState extends State<MyRideDetailsScreen> {
                     children: [
                       Row(
                         children: [
-                          commonNetworkImage(
-                            url:
-                                "https://expertphotography.b-cdn.net/wp-content/uploads/2018/10/cool-profile-pictures-retouching-1.jpg",
-                            height: Responsive.height * 10,
-                            width: Responsive.width * 20,
-                            radius: 15,
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.memory(
+                              const Base64Decoder().convert(
+                                  showIntrestData?.profilePicture ?? ""),
+                              fit: BoxFit.cover,
+                              width: Responsive.width * 25,
+                              height: Responsive.height * 13,
+                            ),
                           ),
                           const SizeBoxV(10),
                           Expanded(
@@ -108,10 +114,10 @@ class _MyRideDetailsScreenState extends State<MyRideDetailsScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  const commonTextWidget(
+                                  commonTextWidget(
                                     color: AppConstants.white,
                                     align: TextAlign.start,
-                                    text: "Name",
+                                    text: showIntrestData?.fullName ?? "Name",
                                     overFlow: TextOverflow.ellipsis,
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
@@ -127,10 +133,11 @@ class _MyRideDetailsScreenState extends State<MyRideDetailsScreen> {
                                             height: 12,
                                           ),
                                           const SizeBoxV(5),
-                                          const commonTextWidget(
+                                          commonTextWidget(
                                             color: AppConstants.white,
                                             align: TextAlign.start,
-                                            text: "Ponlait",
+                                            text: widget.data?.startPoint ??
+                                                "Ponlait",
                                             overFlow: TextOverflow.ellipsis,
                                             fontSize: 12,
                                             fontWeight: FontWeight.w500,
@@ -147,9 +154,10 @@ class _MyRideDetailsScreenState extends State<MyRideDetailsScreen> {
                                       ),
                                       Row(
                                         children: [
-                                          const commonTextWidget(
+                                          commonTextWidget(
                                             color: AppConstants.white,
-                                            text: "Main Gate",
+                                            text: widget.data?.endPoint ??
+                                                "Main Gate",
                                             fontSize: 11,
                                             fontWeight: FontWeight.w700,
                                           ),
@@ -162,10 +170,10 @@ class _MyRideDetailsScreenState extends State<MyRideDetailsScreen> {
                                       ),
                                     ],
                                   ),
-                                  const commonTextWidget(
+                                  commonTextWidget(
                                     color: AppConstants.white,
                                     align: TextAlign.start,
-                                    text: "Female",
+                                    text: showIntrestData?.gender ?? "Female",
                                     overFlow: TextOverflow.ellipsis,
                                     fontSize: 12,
                                     fontWeight: FontWeight.w500,
